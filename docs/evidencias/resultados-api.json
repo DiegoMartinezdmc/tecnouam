@@ -1,0 +1,282 @@
+{
+  "fecha": "2026-10-27T02:05:58.353Z",
+  "herramienta": "Newman - colección Postman contra HTTP local",
+  "solicitudes": [
+    {
+      "nombre": "01 Login ADMIN",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "02 Login USER",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "03 Sin token",
+      "estado": 401,
+      "pruebas": [
+        {
+          "nombre": "HTTP 401",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "04 Credenciales incorrectas",
+      "estado": 401,
+      "pruebas": [
+        {
+          "nombre": "HTTP 401",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "05 USER no puede crear",
+      "estado": 403,
+      "pruebas": [
+        {
+          "nombre": "HTTP 403",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "06 Alta equipo",
+      "estado": 201,
+      "pruebas": [
+        {
+          "nombre": "HTTP 201",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "07 Código duplicado",
+      "estado": 409,
+      "pruebas": [
+        {
+          "nombre": "HTTP 409",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "08 Consulta USER",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "09 Consulta individual",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "10 Actualización",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "11 Fechas inválidas",
+      "estado": 400,
+      "pruebas": [
+        {
+          "nombre": "HTTP 400",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "12 Registrar préstamo",
+      "estado": 201,
+      "pruebas": [
+        {
+          "nombre": "HTTP 201",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "13 Verificar PRESTADO",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        },
+        {
+          "nombre": "Estado PRESTADO",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "14 Doble préstamo bloqueado",
+      "estado": 409,
+      "pruebas": [
+        {
+          "nombre": "HTTP 409",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "15 Eliminación bloqueada",
+      "estado": 409,
+      "pruebas": [
+        {
+          "nombre": "HTTP 409",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "16 Consultar préstamos",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "17 Devolver",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "18 Doble devolución bloqueada",
+      "estado": 409,
+      "pruebas": [
+        {
+          "nombre": "HTTP 409",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "19 Verificar DISPONIBLE",
+      "estado": 200,
+      "pruebas": [
+        {
+          "nombre": "HTTP 200",
+          "correcto": true
+        },
+        {
+          "nombre": "Estado DISPONIBLE",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "20 Eliminar permitido",
+      "estado": 204,
+      "pruebas": [
+        {
+          "nombre": "HTTP 204",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "21 Equipo inexistente",
+      "estado": 404,
+      "pruebas": [
+        {
+          "nombre": "HTTP 404",
+          "correcto": true
+        }
+      ]
+    },
+    {
+      "nombre": "22 Validación campos",
+      "estado": 400,
+      "pruebas": [
+        {
+          "nombre": "HTTP 400",
+          "correcto": true
+        }
+      ]
+    }
+  ],
+  "fallos": [],
+  "estadisticas": {
+    "iterations": {
+      "total": 1,
+      "pending": 0,
+      "failed": 0
+    },
+    "items": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "scripts": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequests": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "requests": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "tests": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "assertions": {
+      "total": 24,
+      "pending": 0,
+      "failed": 0
+    },
+    "testScripts": {
+      "total": 22,
+      "pending": 0,
+      "failed": 0
+    },
+    "prerequestScripts": {
+      "total": 0,
+      "pending": 0,
+      "failed": 0
+    }
+  }
+}

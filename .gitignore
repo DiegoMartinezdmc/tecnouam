@@ -1,0 +1,13 @@
+.env
+backend/target/
+backend/data/
+frontend/node_modules/
+frontend/dist/
+.idea/
+*.log
+.m2/
+.tools/
+frontend/test-results/
+frontend/playwright-report/
+/README.md
+.github/modernize/

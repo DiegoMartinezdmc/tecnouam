@@ -1,0 +1,18 @@
+{
+  "files.exclude": {
+    "**/.m2": true,
+    "**/.tools": true,
+    "**/node_modules": true,
+    "backend/target": true,
+    "frontend/dist": true,
+    "frontend/test-results": true,
+    "frontend/playwright-report": true
+  },
+  "search.exclude": {
+    "**/.m2/**": true,
+    "**/.tools/**": true,
+    "**/node_modules/**": true,
+    "**/target/**": true,
+    "**/dist/**": true
+  }
+}
