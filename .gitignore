@@ -10,4 +10,5 @@ frontend/dist/
 frontend/test-results/
 frontend/playwright-report/
 /README.md
+/docs/
 .github/modernize/
