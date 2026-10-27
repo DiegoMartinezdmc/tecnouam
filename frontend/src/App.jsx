@@ -168,6 +168,8 @@ export default function App() {
           Centro de capacitación
           <br />
           <b>Universidad Americana</b>
+          <br />
+          <span className="author-tag">Diseño: Javier Espinoza</span>
         </div>
       </aside>
       <div className="workspace">
