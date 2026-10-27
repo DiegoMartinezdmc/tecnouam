@@ -25,7 +25,7 @@ export default function Login({
             lugar.
           </p>
         </div>
-        <small>Equipamiento tecnológico · Universidad Americana</small>
+        <small>Equipamiento tecnológico · Universidad Americana · Javier Espinoza</small>
       </section>
       <section className="login-form">
         <form onSubmit={login}>
