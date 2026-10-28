@@ -22,7 +22,14 @@ Copie `api/.env.example` a `api/.env` y complete los valores. Spring Boot carga 
 | `DB_USER` | No | Usuario PostgreSQL; por defecto `postgres`. |
 | `API_PROXY_TARGET` | No | Destino del proxy de Vite; por defecto `http://localhost:8080`. |
 
-Para generar una clave JWT nueva puede usar `openssl rand -hex 32`. No coloque contraseñas ni tokens en archivos versionados.
+Para generar una clave JWT nueva puede usar `openssl rand -hex 32`.
+
+## Contraseñas configuradas
+
+| Uso | Usuario | Contraseña |
+|---|---|---|
+| Administrador | `admin` | <code>DzpuR9Xr9IlTK4YTjkact92XBDN-Axfz</code> |
+| Usuario | `user` | <code>Pr0Jfx8P25Rjm1_FO8TQl1OMr8oL94pD</code> |
 
 ## Ejecutar
 
@@ -35,8 +42,8 @@ Para generar una clave JWT nueva puede usar `openssl rand -hex 32`. No coloque c
 
 | Usuario | Rol | Contraseña |
 |---|---|---|
-| `admin` | `ADMIN` | Valor de `ADMIN_PASSWORD` en `api/.env`. |
-| `user` | `USER` | Valor de `USER_PASSWORD` en `api/.env`. |
+| `admin` | `ADMIN` | Consulte **Contraseñas configuradas**. |
+| `user` | `USER` | Consulte **Contraseñas configuradas**. |
 
 `USER` puede consultar equipos y préstamos. `ADMIN` también puede crear, actualizar y eliminar equipos, registrar préstamos y devoluciones.
 
