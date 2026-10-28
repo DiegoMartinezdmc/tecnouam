@@ -1,0 +1,67 @@
+# CRUD de equipos. Enviar las solicitudes en orden con REST Client de VS Code.
+# Las contraseñas se leen de api/.env; cada archivo funciona por separado.
+@baseUrl = http://localhost:8080
+
+### 1. Login ADMIN: 200 OK
+# @name crudLoginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "{{$dotenv ADMIN_PASSWORD}}"
+}
+
+### 2. Crear equipo: 201 Created, estado DISPONIBLE
+# @name crudCrearEquipo
+POST {{baseUrl}}/api/equipos
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "CRUD-{{$guid}}",
+  "nombre": "Portátil de inventario",
+  "tipo": "Computadora"
+}
+
+### 3. Listar equipos: 200 OK
+# @name crudListarEquipos
+GET {{baseUrl}}/api/equipos
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+
+### 4. Consultar el equipo creado: 200 OK
+# @name crudConsultarEquipo
+GET {{baseUrl}}/api/equipos/{{crudCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+
+### 5. Actualizar equipo: 200 OK
+# @name crudActualizarEquipo
+PUT {{baseUrl}}/api/equipos/{{crudCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "{{crudCrearEquipo.response.body.$.codigoPatrimonial}}",
+  "nombre": "Portátil actualizado",
+  "tipo": "Computadora portátil"
+}
+
+### 6. Verificar cambios: 200 OK
+# @name crudVerificarCambios
+GET {{baseUrl}}/api/equipos/{{crudCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+
+### 7. Eliminar equipo sin préstamo activo: 204 No Content
+# @name crudEliminarEquipo
+DELETE {{baseUrl}}/api/equipos/{{crudCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+
+### 8. Verificar eliminación: 404 Not Found
+# @name crudVerificarEliminacion
+GET {{baseUrl}}/api/equipos/{{crudCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}
+
+### 7. Eliminar equipo sin préstamo activo: 204 No Content
+# @name crudEliminarEquipo
+DELETE {{baseUrl}}/api/equipos/6
+Authorization: Bearer {{crudLoginAdmin.response.body.$.token}}

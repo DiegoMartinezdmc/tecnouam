@@ -1,0 +1,116 @@
+# Seguridad JWT y roles. Enviar en orden.
+# No requiere datos creados en otros archivos.
+@baseUrl = http://localhost:8080
+
+### 1. GET sin token: 401 Unauthorized
+# @name seguridadSinToken
+GET {{baseUrl}}/api/equipos
+
+### 2. GET con token inválido: 401 Unauthorized
+# @name seguridadTokenInvalido
+GET {{baseUrl}}/api/equipos
+Authorization: Bearer token-invalido
+
+### 3. Login con contraseña incorrecta: 401 Unauthorized
+# @name seguridadLoginIncorrecto
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "incorrecta"
+}
+
+### 4. Login USER: 200 OK
+# @name seguridadLoginUser
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "user",
+  "password": "{{$dotenv USER_PASSWORD}}"
+}
+
+### 5. USER consulta equipos: 200 OK
+# @name seguridadUserEquipos
+GET {{baseUrl}}/api/equipos
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+
+### 6. USER consulta préstamos: 200 OK
+# @name seguridadUserPrestamos
+GET {{baseUrl}}/api/prestamos
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+
+### 7. USER intenta crear equipo: 403 Forbidden
+# @name seguridadUserCrearDenegado
+POST {{baseUrl}}/api/equipos
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "DENEGADO-{{$guid}}",
+  "nombre": "Sin permiso",
+  "tipo": "Computadora"
+}
+
+### 8. USER intenta actualizar equipo: 403 Forbidden
+# @name seguridadUserActualizarDenegado
+PUT {{baseUrl}}/api/equipos/1
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "SIN-PERMISO",
+  "nombre": "Sin permiso",
+  "tipo": "Computadora"
+}
+
+### 9. USER intenta eliminar equipo: 403 Forbidden
+# @name seguridadUserEliminarDenegado
+DELETE {{baseUrl}}/api/equipos/1
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+
+### 10. USER intenta registrar préstamo: 403 Forbidden
+# @name seguridadUserPrestarDenegado
+POST {{baseUrl}}/api/prestamos
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "equipoId": 1,
+  "nombreSolicitante": "Sin permiso",
+  "fechaPrestamo": "{{$datetime 'YYYY-MM-DD'}}",
+  "fechaPrevistaDevolucion": "{{$datetime 'YYYY-MM-DD' 7 d}}"
+}
+
+### 11. USER intenta devolver préstamo: 403 Forbidden
+# @name seguridadUserDevolverDenegado
+PUT {{baseUrl}}/api/prestamos/1/devolver
+Authorization: Bearer {{seguridadLoginUser.response.body.$.token}}
+
+### 12. Login ADMIN: 200 OK
+# @name seguridadLoginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "{{$dotenv ADMIN_PASSWORD}}"
+}
+
+### 13. ADMIN puede crear equipo: 201 Created
+# @name seguridadAdminCrear
+POST {{baseUrl}}/api/equipos
+Authorization: Bearer {{seguridadLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "ADMIN-{{$guid}}",
+  "nombre": "Equipo autorizado",
+  "tipo": "Computadora"
+}
+
+### 14. Limpiar equipo de demostración: 204 No Content
+# @name seguridadAdminLimpiar
+DELETE {{baseUrl}}/api/equipos/{{seguridadAdminCrear.response.body.$.id}}
+Authorization: Bearer {{seguridadLoginAdmin.response.body.$.token}}

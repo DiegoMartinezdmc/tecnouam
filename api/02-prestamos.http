@@ -1,0 +1,77 @@
+# Registro de préstamos y conflictos. Enviar en orden.
+# Este archivo crea su propio equipo y no depende de los demás archivos.
+@baseUrl = http://localhost:8080
+
+### 1. Login ADMIN: 200 OK
+# @name prestamoLoginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "{{$dotenv ADMIN_PASSWORD}}"
+}
+
+### 2. Crear equipo disponible: 201 Created
+# @name prestamoCrearEquipo
+POST {{baseUrl}}/api/equipos
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "PRESTAMO-{{$guid}}",
+  "nombre": "Proyector de demostración",
+  "tipo": "Proyector"
+}
+
+### 3. Registrar préstamo: 201 Created, estado ACTIVO
+# @name prestamoCrear
+POST {{baseUrl}}/api/prestamos
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "equipoId": {{prestamoCrearEquipo.response.body.$.id}},
+  "nombreSolicitante": "Ana López",
+  "fechaPrestamo": "{{$datetime 'YYYY-MM-DD'}}",
+  "fechaPrevistaDevolucion": "{{$datetime 'YYYY-MM-DD' 7 d}}"
+}
+
+### 4. Listar préstamos: 200 OK; el nuevo préstamo figura ACTIVO
+# @name prestamoListar
+GET {{baseUrl}}/api/prestamos
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+
+### 5. Intentar prestar de nuevo el mismo equipo: 409 Conflict
+# @name prestamoDuplicado
+POST {{baseUrl}}/api/prestamos
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "equipoId": {{prestamoCrearEquipo.response.body.$.id}},
+  "nombreSolicitante": "Carlos Pérez",
+  "fechaPrestamo": "{{$datetime 'YYYY-MM-DD'}}",
+  "fechaPrevistaDevolucion": "{{$datetime 'YYYY-MM-DD' 7 d}}"
+}
+
+### 6. Verificar equipo PRESTADO: 200 OK
+# @name prestamoEquipoOcupado
+GET {{baseUrl}}/api/equipos/{{prestamoCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+
+### 7. Eliminación bloqueada por préstamo activo: 409 Conflict
+# @name prestamoEliminarBloqueado
+DELETE {{baseUrl}}/api/equipos/{{prestamoCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+
+# Limpieza opcional tras la demostración.
+### 8. Devolver el préstamo: 200 OK
+# @name prestamoLimpiarDevolucion
+PUT {{baseUrl}}/api/prestamos/{{prestamoCrear.response.body.$.id}}/devolver
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}
+
+### 9. Eliminar equipo de demostración: 204 No Content
+# @name prestamoLimpiarEquipo
+DELETE {{baseUrl}}/api/equipos/{{prestamoCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{prestamoLoginAdmin.response.body.$.token}}

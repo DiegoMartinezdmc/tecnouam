@@ -1,0 +1,69 @@
+# Devolución y recuperación de disponibilidad. Enviar en orden.
+# Este archivo crea sus propios datos y no depende de los demás archivos.
+@baseUrl = http://localhost:8080
+
+### 1. Login ADMIN: 200 OK
+# @name devolucionLoginAdmin
+POST {{baseUrl}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "{{$dotenv ADMIN_PASSWORD}}"
+}
+
+### 2. Crear equipo: 201 Created
+# @name devolucionCrearEquipo
+POST {{baseUrl}}/api/equipos
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "codigoPatrimonial": "DEVOLUCION-{{$guid}}",
+  "nombre": "Tableta de demostración",
+  "tipo": "Tableta"
+}
+
+### 3. Prestar equipo: 201 Created
+# @name devolucionCrearPrestamo
+POST {{baseUrl}}/api/prestamos
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+Content-Type: application/json
+
+{
+  "equipoId": {{devolucionCrearEquipo.response.body.$.id}},
+  "nombreSolicitante": "Lucía Morales",
+  "fechaPrestamo": "{{$datetime 'YYYY-MM-DD'}}",
+  "fechaPrevistaDevolucion": "{{$datetime 'YYYY-MM-DD' 7 d}}"
+}
+
+### 4. Verificar estado PRESTADO: 200 OK
+# @name devolucionVerificarPrestado
+GET {{baseUrl}}/api/equipos/{{devolucionCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+
+### 5. Registrar devolución: 200 OK, estado DEVUELTO
+# @name devolucionRegistrar
+PUT {{baseUrl}}/api/prestamos/{{devolucionCrearPrestamo.response.body.$.id}}/devolver
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+
+### 6. Verificar equipo DISPONIBLE: 200 OK
+# @name devolucionVerificarDisponible
+GET {{baseUrl}}/api/equipos/{{devolucionCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+
+### 7. Listar préstamos: 200 OK; el préstamo figura DEVUELTO
+# @name devolucionListarPrestamos
+GET {{baseUrl}}/api/prestamos
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+
+### 8. Devolver otra vez: 409 Conflict
+# @name devolucionDuplicada
+PUT {{baseUrl}}/api/prestamos/{{devolucionCrearPrestamo.response.body.$.id}}/devolver
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
+
+# Limpieza opcional tras la demostración.
+### 9. Eliminar equipo ya disponible: 204 No Content
+# @name devolucionLimpiarEquipo
+DELETE {{baseUrl}}/api/equipos/{{devolucionCrearEquipo.response.body.$.id}}
+Authorization: Bearer {{devolucionLoginAdmin.response.body.$.token}}
